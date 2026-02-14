@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Author: Kartikeya
  */
 public class FactoryRobotHazardAnalyzer {
-
+    //Entry point of the Factory Robot Hazard Analyzer application.
     public static void main(String[] args) {
 
         // UC1: Static message
@@ -30,7 +30,7 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter machinery state: ");
         String machineryState = scanner.nextLine();
 
-        // Echo inputs (no validation yet)
+        // print inputs (no validation yet)
         System.out.println("\n--- Input Summary ---");
         System.out.println("Arm Precision: " + armPrecision);
         System.out.println("Worker Density: " + workerDensity);

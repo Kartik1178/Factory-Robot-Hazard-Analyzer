@@ -8,11 +8,18 @@ import java.util.Scanner;
  *
  * UC1: Display static system message.
  * UC2: Accept robot hazard inputs and echo them.
+ * UC3: Calculate and display hazard risk score (no validation).
  *
  * Author: Kartikeya
  */
 public class FactoryRobotHazardAnalyzer {
-    //Entry point of the Factory Robot Hazard Analyzer application.
+
+    /**
+     * Entry point of the application.
+     * UC1: Displays system message.
+     * UC2: Accepts hazard-related inputs.
+     * UC3: Calculates and prints hazard risk score.
+     */
     public static void main(String[] args) {
 
         // UC1: Static message
@@ -26,15 +33,29 @@ public class FactoryRobotHazardAnalyzer {
 
         System.out.print("Enter worker density: ");
         int workerDensity = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine();
+
         System.out.print("Enter machinery state: ");
         String machineryState = scanner.nextLine();
 
-        // print inputs (no validation yet)
-        System.out.println("\n--- Input Summary ---");
-        System.out.println("Arm Precision: " + armPrecision);
-        System.out.println("Worker Density: " + workerDensity);
-        System.out.println("Machinery State: " + machineryState);
+        // UC3: Calculate hazard risk score
+        double riskScore = calculateRiskScore(armPrecision, workerDensity);
+
+        // Display risk score
+        System.out.println("\nHazard Risk Score: " + riskScore);
+
         scanner.close();
+    }
+
+    /**
+     * Calculates hazard risk score based on arm precision and worker density.
+     * Assumes inputs are valid (no validation as per UC3 requirement).
+     *
+     * @param armPrecision  precision of robotic arm
+     * @param workerDensity number of workers near robot
+     * @return calculated hazard risk score
+     */
+    public static double calculateRiskScore(double armPrecision, int workerDensity) {
+        return armPrecision * workerDensity;
     }
 }

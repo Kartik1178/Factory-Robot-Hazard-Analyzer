@@ -5,9 +5,10 @@ import java.util.Scanner;
  *
  * UC1: Display static system message.
  * UC2: Accept robot hazard inputs.
- * UC3: Calculate hazard risk score (no validation).
- * UC4: Introduce validation using conditional logic.
- * UC5: Refactor validation and calculation into a separate method.
+ * UC3: Calculate hazard risk score.
+ * UC4: Validation using conditional logic.
+ * UC5: Refactor validation into separate method.
+ * UC6: Introduce custom exception for invalid scenarios.
  *
  * Author: Kartikeya
  */
@@ -15,12 +16,10 @@ public class FactoryRobotHazardAnalyzer {
 
     public static void main(String[] args) {
 
-        // UC1
         System.out.println("Factory Robot Hazard Analyzer");
 
         Scanner scanner = new Scanner(System.in);
 
-        // UC2 inputs
         System.out.print("Enter arm precision (0.0 - 1.0): ");
         double armPrecision = scanner.nextDouble();
 
@@ -31,11 +30,11 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter machinery state (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
-        // UC5: Call abstracted method
-        double riskScore = calculateHazardRisk(armPrecision, workerDensity, machineryState);
-
-        if (riskScore != -1) {
+        try {
+            double riskScore = calculateHazardRisk(armPrecision, workerDensity, machineryState);
             System.out.println("Hazard Risk Score: " + riskScore);
+        } catch (RobotSafetyException e) {
+            // Exception already prints the message
         }
 
         scanner.close();
@@ -43,25 +42,28 @@ public class FactoryRobotHazardAnalyzer {
 
     /**
      * Validates inputs and calculates hazard risk score.
-     * Returns -1 if validation fails.
+     * Throws RobotSafetyException if validation fails.
      */
-    public static double calculateHazardRisk(double armPrecision, int workerDensity, String machineryState) {
+    public static double calculateHazardRisk(double armPrecision,
+                                             int workerDensity,
+                                             String machineryState)
+            throws RobotSafetyException {
 
-        // Validation (moved from main)
         if (armPrecision < 0.0 || armPrecision > 1.0) {
-            System.out.println("Error: Arm precision must be 0.0-1.0");
-            return -1;
-        } else if (workerDensity < 1 || workerDensity > 20) {
-            System.out.println("Error: Worker density must be 1-20");
-            return -1;
-        } else if (!machineryState.equals("Worn") &&
-                !machineryState.equals("Faulty") &&
-                !machineryState.equals("Critical")) {
-            System.out.println("Error: Unsupported machinery state");
-            return -1;
+            throw new RobotSafetyException("Error: Arm precision must be 0.0-1.0");
         }
 
-        // UC3 logic reused
+        if (workerDensity < 1 || workerDensity > 20) {
+            throw new RobotSafetyException("Error: Worker density must be 1-20");
+        }
+
+        if (!machineryState.equals("Worn") &&
+                !machineryState.equals("Faulty") &&
+                !machineryState.equals("Critical")) {
+            throw new RobotSafetyException("Error: Unsupported machinery state");
+        }
+
+        // UC3 logic reused (final formula comes in later UC)
         return armPrecision * workerDensity;
     }
 }

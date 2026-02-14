@@ -3,58 +3,52 @@ import java.util.Scanner;
 /**
  * FactoryRobotHazardAnalyzer
  *
- * Entry point for the Factory Robot Hazard Analyzer system.
- * The application evolves incrementally across multiple use cases.
- *
  * UC1: Display static system message.
- * UC2: Accept robot hazard inputs and echo them.
- * UC3: Calculate and display hazard risk score (no validation).
+ * UC2: Accept robot hazard inputs.
+ * UC3: Calculate hazard risk score (no validation).
+ * UC4: Introduce validation using conditional logic.
  *
  * Author: Kartikeya
  */
 public class FactoryRobotHazardAnalyzer {
 
-    /**
-     * Entry point of the application.
-     * UC1: Displays system message.
-     * UC2: Accepts hazard-related inputs.
-     * UC3: Calculates and prints hazard risk score.
-     */
     public static void main(String[] args) {
 
-        // UC1: Static message
+        // UC1
         System.out.println("Factory Robot Hazard Analyzer");
 
-        // UC2: Accept inputs
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter arm precision: ");
+        // UC2 inputs
+        System.out.print("Enter arm precision (0.0 - 1.0): ");
         double armPrecision = scanner.nextDouble();
 
-        System.out.print("Enter worker density: ");
+        System.out.print("Enter worker density (1 - 20): ");
         int workerDensity = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter machinery state: ");
+        System.out.print("Enter machinery state (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
-        // UC3: Calculate hazard risk score
-        double riskScore = calculateRiskScore(armPrecision, workerDensity);
-
-        // Display risk score
-        System.out.println("\nHazard Risk Score: " + riskScore);
+        // UC4: Validation using conditional logic
+        if (armPrecision < 0.0 || armPrecision > 1.0) {
+            System.out.println("Error: Arm precision must be 0.0-1.0");
+        } else if (workerDensity < 1 || workerDensity > 20) {
+            System.out.println("Error: Worker density must be 1-20");
+        } else if (!machineryState.equals("Worn") &&
+                !machineryState.equals("Faulty") &&
+                !machineryState.equals("Critical")) {
+            System.out.println("Error: Unsupported machinery state");
+        } else {
+            // UC3 logic reused
+            double riskScore = calculateRiskScore(armPrecision, workerDensity);
+            System.out.println("Hazard Risk Score: " + riskScore);
+        }
 
         scanner.close();
     }
 
-    /**
-     * Calculates hazard risk score based on arm precision and worker density.
-     * Assumes inputs are valid (no validation as per UC3 requirement).
-     *
-     * @param armPrecision  precision of robotic arm
-     * @param workerDensity number of workers near robot
-     * @return calculated hazard risk score
-     */
+    // UC3 business logic
     public static double calculateRiskScore(double armPrecision, int workerDensity) {
         return armPrecision * workerDensity;
     }

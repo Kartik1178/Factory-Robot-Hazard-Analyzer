@@ -1,16 +1,13 @@
 import java.util.Scanner;
 
 /**
- * FactoryRobotHazardAnalyzer
- *
- * UC1: Display static system message.
- * UC2: Accept robot hazard inputs.
- * UC3: Calculate hazard risk score.
- * UC4: Validation using conditional logic.
- * UC5: Refactor validation into separate method.
- * UC6: Introduce custom exception for invalid scenarios.
- *
- * Author: Kartikeya
+ * UC1: Display static system message
+ * UC2: Accept inputs
+ * UC3: Calculate simple risk
+ * UC4: Validation with if-else
+ * UC5: Refactor into method
+ * UC6: Custom exception handling
+ * UC7: Machinery state risk mapping
  */
 public class FactoryRobotHazardAnalyzer {
 
@@ -34,21 +31,18 @@ public class FactoryRobotHazardAnalyzer {
             double riskScore = calculateHazardRisk(armPrecision, workerDensity, machineryState);
             System.out.println("Hazard Risk Score: " + riskScore);
         } catch (RobotSafetyException e) {
-            // Exception already prints the message
+            // message already printed by exception
         }
 
         scanner.close();
     }
 
-    /**
-     * Validates inputs and calculates hazard risk score.
-     * Throws RobotSafetyException if validation fails.
-     */
     public static double calculateHazardRisk(double armPrecision,
                                              int workerDensity,
                                              String machineryState)
             throws RobotSafetyException {
 
+        // Validation
         if (armPrecision < 0.0 || armPrecision > 1.0) {
             throw new RobotSafetyException("Error: Arm precision must be 0.0-1.0");
         }
@@ -57,13 +51,20 @@ public class FactoryRobotHazardAnalyzer {
             throw new RobotSafetyException("Error: Worker density must be 1-20");
         }
 
-        if (!machineryState.equals("Worn") &&
-                !machineryState.equals("Faulty") &&
-                !machineryState.equals("Critical")) {
+        // UC7: Machinery state risk mapping
+        double machineRiskFactor;
+
+        if (machineryState.equals("Worn")) {
+            machineRiskFactor = 1.3;
+        } else if (machineryState.equals("Faulty")) {
+            machineRiskFactor = 2.0;
+        } else if (machineryState.equals("Critical")) {
+            machineRiskFactor = 3.0;
+        } else {
             throw new RobotSafetyException("Error: Unsupported machinery state");
         }
 
-        // UC3 logic reused (final formula comes in later UC)
-        return armPrecision * workerDensity;
+        // Updated hazard formula using mapped factor
+        return armPrecision * workerDensity * machineRiskFactor;
     }
 }
